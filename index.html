@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1B4965"><title>Кабінет учителя · Планувальник завдань</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brandmark">КУ</div><div><strong>Кабінет учителя</strong><small>Планувальник · v1.0</small></div></div>
+    <nav aria-label="Розділи програми">
+      <button class="nav active" data-page="editor">✎ <span>Нове завдання</span></button>
+      <button class="nav" data-page="saved">▤ <span>Мої завдання</span></button>
+      <button class="nav" data-page="templates">▧ <span>Шаблони</span></button>
+      <button class="nav" data-page="settings">⚙ <span>Налаштування</span></button>
+    </nav>
+    <div class="sidefooter">Дані зберігаються лише у цьому браузері.<br><strong>Classroom не підключено.</strong></div>
+  </aside>
+  <main class="main">
+    <div class="topline"><span class="eyebrow">ОСВІТНІЙ РОБОЧИЙ ПРОСТІР</span><span class="offline">● Локальний режим</span></div>
+    <section id="editor" class="page active">
+      <div class="heading"><div><h1 id="editorTitle">Нове завдання</h1><p>Підготуй завдання один раз — використай у потрібних класах.</p></div><button type="button" class="btn ghost" id="clearForm">+ Очистити форму</button></div>
+      <div class="editor-grid">
+        <form id="taskForm" class="panel form-panel">
+          <div class="section-heading"><span class="step">01</span><h2>Параметри уроку</h2></div>
+          <div class="fields two"><label>Предмет<select id="subject" required><option>Географія</option><option>Громадянська освіта</option></select></label><label>Клас<select id="course" required></select></label></div>
+          <label>Тема уроку <span class="req">*</span><input id="title" required maxlength="250" placeholder="Наприклад: Вторинний сектор економіки Європи"></label>
+          <div class="fields two"><label>Дата уроку<input id="lessonDate" type="date" required></label><label>Тип публікації<select id="workType"><option value="ASSIGNMENT">Завдання</option><option value="MATERIAL">Навчальний матеріал</option><option value="ANNOUNCEMENT">Оголошення</option></select></label></div>
+          <div class="section-heading divider-top"><span class="step">02</span><h2>Зміст і матеріали</h2></div>
+          <label>Домашнє завдання / опис <span class="req">*</span><textarea id="description" rows="5" required placeholder="Опрацювати § 12, заповнити таблицю…"></textarea></label>
+          <label>Посилання на ресурси <small>(кожне з нового рядка; лише https://)</small><textarea id="materials" rows="3" placeholder="https://www.youtube.com/…"></textarea></label>
+          <div class="actions-inline"><label>Готовий шаблон<select id="templatePick"><option value="">— Обрати —</option></select></label><button type="button" class="btn ghost" id="applyTemplate">Застосувати</button><button type="button" class="btn ghost" id="saveAsTemplate">Зберегти як шаблон</button></div>
+          <div class="section-heading divider-top"><span class="step">03</span><h2>Терміни та режим</h2></div>
+          <div class="fields two"><label>Дедлайн — дата<input id="dueDate" type="date"></label><label>Дедлайн — час<input id="dueTime" type="time" value="18:00"></label></div>
+          <fieldset><legend>Спосіб публікації (план)</legend><div class="radio-options"><label><input type="radio" name="mode" value="draft" checked> Чернетка</label><label><input type="radio" name="mode" value="now"> Одразу</label><label><input type="radio" name="mode" value="scheduled"> За розкладом</label></div></fieldset>
+          <div class="fields two hidden" id="scheduleFields"><label>Дата публікації<input id="publishDate" type="date"></label><label>Час публікації<input id="publishTime" type="time" value="08:00"></label></div>
+          <p class="hint">Обраний режим лише зберігається як план. Фактична публікація з'явиться на етапі інтеграції Google Classroom.</p>
+          <div class="form-actions"><button type="submit" class="btn primary" id="saveTask">Зберегти завдання</button><button type="button" class="btn secondary" id="copyMriia">Копіювати для Мрії</button></div>
+        </form>
+        <aside class="preview-col"><div class="panel preview sticky"><div class="preview-top"><h2>Попередній перегляд</h2><span class="pill">Для перевірки</span></div><div class="preview-meta"><span id="previewCourse">Оберіть клас</span><span id="previewType">Завдання</span></div><h3 id="previewTitle">Тема уроку з’явиться тут</h3><div class="preview-description" id="previewDescription">Напишіть домашнє завдання — тут відображатиметься готовий текст.</div><div id="previewLinks"></div><div class="preview-bottom"><span>Дата уроку: <b id="previewLesson">—</b></span><span>Здати до: <b id="previewDue">Не задано</b></span><span>Режим: <b id="previewMode">Чернетка</b></span></div><div class="notice">ⓘ Це локальний макет. Жодна дія не надсилає дані учням.</div></div></aside>
+      </div>
+    </section>
+    <section id="saved" class="page"><div class="heading"><div><h1>Мої завдання</h1><p>Збережені в цьому браузері записи.</p></div><button class="btn primary" data-go="editor">+ Нове завдання</button></div><div class="panel"><div class="toolbar"><input id="searchTasks" type="search" placeholder="Пошук за темою, класом, текстом…" aria-label="Пошук завдань"><span id="taskCount"></span></div><div id="taskList" class="item-list"></div></div></section>
+    <section id="templates" class="page"><div class="heading"><div><h1>Шаблони</h1><p>Повторно використовуй типові формулювання.</p></div></div><div class="panel"><div id="templateList" class="item-list"></div></div></section>
+    <section id="settings" class="page"><div class="heading"><div><h1>Налаштування</h1><p>Класи та резервне копіювання.</p></div></div><div class="panel settings"><h2>Перелік класів</h2><p>По одному класу в рядку. Після зміни натисни «Зберегти класи».</p><textarea id="courseSettings" rows="7"></textarea><button class="btn primary" id="saveCourses">Зберегти класи</button><hr><h2>Резервне копіювання</h2><p>Локальні дані можуть зникнути після очищення браузера. Зберігай резервні копії JSON.</p><div class="form-actions"><button class="btn secondary" id="exportData">Експортувати JSON</button><label class="btn ghost file-label" for="importData">Імпортувати JSON</label><input type="file" id="importData" accept=".json,application/json" hidden></div><hr><h2>Інтеграція</h2><p class="hint">Google Classroom API буде налаштовано на другому етапі. Тут немає імітації відправки чи доступу до Google-акаунта.</p></div></section>
+  </main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body></html>
